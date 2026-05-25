@@ -1,24 +1,34 @@
 from init import *
 from utils.load_shader import load_shader
 class Window:
-    def __init__(self, window_size:list = [1920,1080], canvas_size:list=[1920,1080], mode=glfw.RESIZABLE, title="New game"):
+    def __init__(self,window_size=[1920,1080],canvas_size=[1920,1080],fullscreen=False,borderless=True,title="New game"):
         glfw.init()
 
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
         glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        glfw.window_hint(glfw.RESIZABLE, glfw.TRUE)
+        monitor = None
 
-        self.window = glfw.create_window(
-            window_size[0], window_size[1],
-            title, None, None
-        )
+        if fullscreen:
+            monitor = glfw.get_primary_monitor()
+
+        elif borderless:
+            monitor_info = glfw.get_video_mode(glfw.get_primary_monitor())
+
+            glfw.window_hint(glfw.DECORATED, glfw.FALSE)
+
+            window_size = [monitor_info.size.width,monitor_info.size.height]
+
+        self.window = glfw.create_window(window_size[0],window_size[1],title,monitor,None)
+
+        if borderless:
+            glfw.set_window_pos(self.window, 0, 0)
         if not self.window:
             glfw.terminate()
 
         glfw.make_context_current(self.window)
-
+        glfw.set_input_mode(self.window, glfw.CURSOR, glfw.CURSOR_HIDDEN)
 
         self.window_size = window_size
         self.canvas_size = canvas_size
