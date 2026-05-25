@@ -5,13 +5,15 @@ if TYPE_CHECKING:
     from main import Game
 
 from data.classes.campfire import Campfire
-
+from data.classes.grass import Grass
+from data.classes.sky import Sky
 class Island:
     def __init__(self, game:"Game"):
         self.game = game
         
         self.campfire = Campfire(self.game)
-        
+        self.grass = Grass(self.game)
+        self.sky = Sky(self.game)
         self.border_sprite = Sprite("border.png")
         self.island_sprite = Sprite("island.png")
         self.house_sprite = Sprite("house.png")
@@ -24,15 +26,16 @@ class Island:
     def update(self):
         self.game.player_manager.update()
         self.campfire.update()
+        self.sky.update()
         self.water_sprite.set_custom_uniforms("uTime",time.time() % 1000)
 
     def draw(self):
-        self.game.window.render(self.sky_sprite, [16,16])
+        self.sky.draw()
         self.game.window.render(self.island_sprite, [112,125])
         self.campfire.draw()
         self.game.window.render(self.house_sprite, [160,97])
         self.game.window.render(self.water_sprite, [16,16])
         self.game.player_manager.draw()
-        self.game.window.render(self.grass_sprite, [113,119])
+        self.grass.draw()
         self.game.window.render(self.border_sprite, [0,0])
-        
+
