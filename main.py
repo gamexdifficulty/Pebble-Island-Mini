@@ -59,16 +59,14 @@ class Game(FrostlightEngine):
                 self.transition_unit = 1.0
 
         self.island.update()
+        self.gameManager.update()
 
         if self.state == "menu":
             self.multiplayer_button.update(self.mouse_pos, self.transition_unit)
             self.singleplayer_button.update(self.mouse_pos, self.transition_unit)
             self.leave_button.update(self.mouse_pos, self.transition_unit)
             self.mouse_sprite.alpha = self.transition_unit
-        
-        elif self.state == "game":
-            self.gameManager.update()
-        
+              
         if self.input.get("menu"):
             self.state = "menu"
 
