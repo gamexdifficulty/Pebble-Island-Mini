@@ -4,6 +4,7 @@ from data.classes.island import Island
 from data.classes.button import Button
 from data.classes.player import Player
 from data.classes.player_manager import PlayerManager
+from data.classes.networkManager import NetworkManager
 from data.classes.gameManager import GameManager
 
 class Game(FrostlightEngine):
@@ -42,6 +43,7 @@ class Game(FrostlightEngine):
         self.player = Player(self,True)
         self.island = Island(self)
         self.player_manager = PlayerManager(self)
+        self.network_manager = NetworkManager(self)
 
         self.player_manager.player_list[None] = self.player
         
@@ -52,11 +54,14 @@ class Game(FrostlightEngine):
         self.transition = True
         
     def button_quit(self):
+        if self.network_manager.connected:
+            self.network_manager.send_quit()
         self.running = False
         exit(0)
     
     def button_multiplayer(self):
         self.begin_transition()
+        self.network_manager.run()
     
     def button_singleplayer(self):
         self.begin_transition()
