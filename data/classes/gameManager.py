@@ -11,7 +11,7 @@ class GameManager:
         self.game = game
         
         self.weather_value = 0
-        self.time = 500
+        self.time = 0
         self.day = 1
 
         opensimplex.seed(933673157426)
