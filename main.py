@@ -2,6 +2,7 @@ from frostlight_engine import *
 
 from data.classes.island import Island
 from data.classes.button import Button
+from data.classes.player import Player
 from data.classes.player_manager import PlayerManager
 from data.classes.gameManager import GameManager
 
@@ -38,8 +39,11 @@ class Game(FrostlightEngine):
         
         self.gameManager = GameManager(self)
         
+        self.player = Player(self,True)
         self.island = Island(self)
         self.player_manager = PlayerManager(self)
+
+        self.player_manager.player_list[None] = self.player
         
     def event_quit(self):
         self.running = False
