@@ -34,8 +34,6 @@ class Sky:
         # Clouds
         weather_value = int((self.game.gameManager.weather_value + 1) * 5)
         num_clouds = int(3 + (weather_value/10)*7)
-        
-        cloud_brightness = 1.0
 
         CLOUD_WIDTH = 30
         SCREEN_WIDTH = 320
@@ -55,7 +53,7 @@ class Sky:
                 self.spawn_cloud()
                     
         for cloud in self.clouds.copy():
-            cloud.update(max(weather_value/2,1), cloud_brightness)
+            cloud.update(max(weather_value/2,1))
             if cloud.can_be_deleted:
                 self.clouds.remove(cloud)
 
@@ -81,11 +79,15 @@ class Cloud:
             Sprite("cloud2.png"),
             Sprite("cloud3.png"),
         ][self.type]
+        
+        self.sprite.set_custom_shader("cloud.frag")
 
-    def update(self, velocity, cloud_brightness):
+    def update(self, velocity):
         self.pos[0] += (velocity * 10/7) * self.game.delta_time
         if self.pos[0] > self.game.window.canvas_size[0]-16:
             self.can_be_deleted = True
+            
+        self.sprite.set_custom_uniforms("uTime", self.game.gameManager.time)
 
     def draw(self):
         self.game.window.render(self.sprite, self.pos)
