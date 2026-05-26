@@ -9,8 +9,8 @@ out vec4 FragColor;
 vec3 NIGHT = vec3(32, 35, 52);
 vec3 DAY   = vec3(76, 139, 216);
 
-vec3 SUNRISE_1 = vec3(86, 61, 162);
-vec3 SUNRISE_2 = vec3(225, 155, 95);
+vec3 SUNRISE_1 = vec3(74, 43, 106);
+vec3 SUNRISE_2 = vec3(184, 132, 87);
 
 vec3 SUNSET_1  = vec3(145, 95, 185);
 
