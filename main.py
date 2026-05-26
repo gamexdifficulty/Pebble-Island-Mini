@@ -15,6 +15,16 @@ class Game(FrostlightEngine):
         self.transition_unit = 1.0
         self.mouse_pos = [0,0]
 
+        self.input.bind("left",KEYBOARD.LEFT,PRESSED)
+        self.input.bind("left",KEYBOARD.A,PRESSED)
+        self.input.bind("right",KEYBOARD.RIGHT,PRESSED)
+        self.input.bind("right",KEYBOARD.D,PRESSED)
+
+        self.input.bind("up",KEYBOARD.UP,PRESSED)
+        self.input.bind("up",KEYBOARD.W,PRESSED)
+        self.input.bind("down",KEYBOARD.DOWN,PRESSED)
+        self.input.bind("down",KEYBOARD.S,PRESSED)
+
         self.input.bind("accept",MOUSE.LEFT,CLICKED)
         self.input.bind("accept",KEYBOARD.ENTER,PRESSED)
         
