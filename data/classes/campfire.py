@@ -10,7 +10,7 @@ class Campfire:
     def __init__(self,game:"Game"):
         self.game = game
         
-        self.campfire_state = "off"
+        self.campfire_state = "loop"
         self.campfire_off_sprite = Sprite("campfire_off.png")
         self.campfire_animation_on = AnimationEvent(self.game,0.4, callback=self.loop_campfire,sprites=
                                                     [
