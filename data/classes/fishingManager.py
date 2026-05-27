@@ -4,6 +4,7 @@ from frostlight_engine import *
 from typing import TYPE_CHECKING
 
 from data.classes.catchBook import RARITY_WEIGHTS, FISH_DATABASE
+from data.classes.font import Font
 
 if TYPE_CHECKING:
     from main import Game
@@ -18,10 +19,13 @@ class FishingManager:
         
         self.bobber_sprite = Sprite("bobber.png")
         self.bobber_pos = [0,0]
+        self.font = Font(self.game,1)
 
         self.fish_sprites = [
             Sprite("fish.png")
         ]
+        
+        self.catch_notifications = []
 
         self.flying_fish = None
         self.current_fish = None
@@ -39,7 +43,22 @@ class FishingManager:
     def pulling_in(self):
         if self.fish_biting:
             self.pull_in_fish()
-            self.catch_fish()
+            
+            save = self.game.save_manager.load("catchbook", "save0", {})
+            is_new = self.current_fish["name"] not in save
+
+            if is_new:
+                save[self.current_fish["name"]] = 0
+
+            save[self.current_fish["name"]] += 1
+
+            if is_new:
+                self.spawn_catch_notification(f'Neu: {self.current_fish["name"]}')
+            else:
+                self.spawn_catch_notification(self.current_fish["name"])
+            self.game.save_manager.save("catchbook", save, "save0")
+
+            self.current_fish = None
         self.stop_fishing()
 
     def stop_fishing(self):
@@ -52,6 +71,7 @@ class FishingManager:
         self.calculate_bobber_position()
         self.update_flying_fish()
         self.update_biting_particles()
+        self.update_catch_notifications()
         self.biting_wait_time -= self.game.delta_time
         if self.fishing and self.hit_water and self.biting_wait_time <= 0 and not self.fish_biting:
 
@@ -83,6 +103,8 @@ class FishingManager:
                 self.game.window.render(self.bobber_sprite, [self.bobber_pos[0], self.bobber_pos[1]+ 1 + math.sin((time.time()*20) % 100)])
             else:
                 self.game.window.render(self.bobber_sprite, self.bobber_pos)
+                
+        self.draw_catch_notifications()
                 
     def calculate_bobber_position(self):
         canvas_w, canvas_h = self.game.window.canvas_size
@@ -226,9 +248,24 @@ class FishingManager:
             weighted.extend([fish] * weight)
 
         return random.choice(weighted)
-    
-    def catch_fish(self):
-        if not self.current_fish:
-            return
+        
+    def spawn_catch_notification(self, text):
+        self.catch_notifications.append({
+            "text": text,
+            "pos": [self.game.player.x - 14, self.game.player.y - 18],
+            "life": 2.0,
+            "max_life": 2.0
+        })
 
-        print(f'Caught: {self.current_fish["name"]}')
+
+    def update_catch_notifications(self):
+        for notification in self.catch_notifications[:]:
+            notification["life"] -= self.game.delta_time
+            notification["pos"][1] -= self.game.delta_time * 8
+            if notification["life"] <= 0:
+                self.catch_notifications.remove(notification)
+
+    def draw_catch_notifications(self):
+        for notification in self.catch_notifications:
+            alpha = notification["life"] / notification["max_life"]
+            self.font.draw(notification["text"], notification["pos"], alpha=alpha)
