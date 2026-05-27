@@ -9,10 +9,9 @@ SCALE = 0.0008
 class GameManager:
     def __init__(self,game:"Game"):
         self.game = game
-        
         self.weather_value = 0
-        self.time = self.game.save_manager.load("daytime","save0",[0,1])[0]
-        self.day = self.game.save_manager.load("daytime","save0",[0,1])[1]
+        self.time = self.game.save_manager.load("daytime","save0",[0,1])[1]
+        self.day = self.game.save_manager.load("daytime","save0",[0,1])[0]
 
         opensimplex.seed(933673157426)
         
