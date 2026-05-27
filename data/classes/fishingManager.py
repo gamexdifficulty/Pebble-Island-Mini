@@ -72,7 +72,9 @@ class FishingManager:
         self.update_flying_fish()
         self.update_biting_particles()
         self.update_catch_notifications()
-        self.biting_wait_time -= self.game.delta_time
+        if self.hit_water:
+            self.biting_wait_time -= self.game.delta_time
+            
         if self.fishing and self.hit_water and self.biting_wait_time <= 0 and not self.fish_biting:
 
             fish_data = self.choose_fish(self.game.gameManager.time, self.game.gameManager.day, int((self.game.gameManager.weather_value + 1) * 5))
