@@ -326,6 +326,7 @@ class CatchBook:
                 
         max_pages = math.ceil(len(FISH_DATABASE) / 4)
         self.font.draw(f"{self.page + 1}/{max_pages}",[165, 86])
+        self.font.draw(f"Tag {self.game.gameManager.day}",[190, 86])
 
 
         # right side info
