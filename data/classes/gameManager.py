@@ -11,8 +11,8 @@ class GameManager:
         self.game = game
         
         self.weather_value = 0
-        self.time = 0
-        self.day = 1
+        self.time = self.game.save_manager.load("daytime","save0",[0,1])[0]
+        self.day = self.game.save_manager.load("daytime","save0",[0,1])[1]
 
         opensimplex.seed(933673157426)
         
@@ -25,3 +25,5 @@ class GameManager:
             self.day += 1
             if self.day >= 31:
                 self.day = 1
+                
+        self.game.save_manager.save("daytime",[self.day, self.time], "save0")
