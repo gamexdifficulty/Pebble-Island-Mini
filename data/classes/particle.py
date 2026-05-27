@@ -20,21 +20,25 @@ class ParticleManager:
         for particle in self.particles:
             particle.draw()
             
-    def spawn_particle(self, type, pos, range, vel, ttl):
-        particle = Particle(self.game, type, [pos[0]+random.randint(0,range[0]), pos[1]+random.randint(0,range[1])], vel, ttl)
+    def spawn_particle(self, type, pos, range, vel, ttl, flipped=False):
+        particle = Particle(self.game, type, [pos[0]+random.randint(0,range[0]), pos[1]+random.randint(0,range[1])], vel, ttl, flipped )
         self.particles.append(particle)
     
 class Particle:
-    def __init__(self, game:"Game", type, pos, vel, timer):
+    def __init__(self, game:"Game", type, pos, vel, timer, flipped):
         self.game = game
         self.type = type
         self.pos = pos
         self.vel = vel
         self.timer = timer
         self.can_be_deleted = False
+        self.flipped = flipped
         
         if self.type == 1:
             self.animation = AnimationEvent(self.game, self.timer, [Sprite("particle_1.png"),Sprite("particle_2.png"),Sprite("particle_3.png")], self.ready_to_delete)
+
+        if self.type == 2:
+            self.animation = AnimationEvent(self.game, self.timer, [Sprite("particle_5.png")], self.ready_to_delete)
     
     def ready_to_delete(self):
         self.can_be_deleted = True
@@ -48,7 +52,14 @@ class Particle:
         
         if self.type == 1:
             self.animation.update()
+
+        if self.type == 2:
+            self.animation.update()
     
     def draw(self):
         if self.type == 1:
             self.game.window.render(self.animation.get(), self.pos)
+        if self.type == 2:
+            sprite = self.animation.get()
+            sprite.flipped = self.flipped
+            self.game.window.render(sprite, self.pos)
