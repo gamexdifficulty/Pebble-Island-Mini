@@ -26,6 +26,8 @@ class Game(FrostlightEngine):
         self.input.bind("up",KEYBOARD.W,PRESSED)
         self.input.bind("down",KEYBOARD.DOWN,PRESSED)
         self.input.bind("down",KEYBOARD.S,PRESSED)
+        
+        self.input.bind("fish",KEYBOARD.SPACE,CLICKED)
 
         self.input.bind("accept",MOUSE.LEFT,CLICKED)
         self.input.bind("accept",KEYBOARD.ENTER,PRESSED)
