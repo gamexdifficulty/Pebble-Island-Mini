@@ -13,7 +13,7 @@ class NetworkManager:
         self.game = game
         
         self.connected = False
-        self.address = ("192.168.2.128", 50451)
+        self.address = ("frostlightgames.net", 50451)
         self.sessionID = ""
 
         self.socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -26,7 +26,7 @@ class NetworkManager:
         }
         
     def run(self):
-        threading.Thread(target=self.loop,args=()).start()
+        threading.Thread(target=self.loop,args=(),daemon=True).start()
         
     def send(self,packet:Packet):
         if not self.connected:
