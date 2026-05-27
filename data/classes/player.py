@@ -48,7 +48,7 @@ class Player:
                         self.animation_state = "idle"
                         self.game.island.fishing_manager.pulling_in()
 
-            if self.animation_state != "fishing" and self.fishing_state != "pulling" and self.fishing_state != "fishing":
+            if self.animation_state != "fishing" and self.fishing_state != "pulling" and self.fishing_state != "fishing" and not self.game.island.catch_book.opened:
                 direction = self.game.input.get("right")-self.game.input.get("left")
                 self.x = min(200,max(112,self.x + direction*self.game.delta_time*25))
                 if direction == 1:

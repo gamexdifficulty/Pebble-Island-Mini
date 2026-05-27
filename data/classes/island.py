@@ -10,6 +10,7 @@ from data.classes.grass import Grass
 from data.classes.sky import Sky
 from data.classes.particle import ParticleManager
 from data.classes.fishingManager import FishingManager
+from data.classes.catchBook import CatchBook
 class Island:
     def __init__(self, game:"Game"):
         self.game = game
@@ -20,6 +21,7 @@ class Island:
         self.campfire = Campfire(self.game)
         self.grass = Grass(self.game)
         self.sky = Sky(self.game)
+        self.catch_book = CatchBook(self.game)
         self.particle_manager = ParticleManager(self.game)
         self.fishing_manager = FishingManager(self.game)
         
@@ -37,6 +39,7 @@ class Island:
             self.game.player_manager.update()
         self.campfire.update()
         self.sky.update()
+        self.catch_book.update()
         self.particle_manager.update()
         self.fishing_manager.update()
         self.water_sprite.set_custom_uniforms("uTime",time.time() % 1000)
@@ -63,5 +66,6 @@ class Island:
         self.grass.draw()
         self.fishing_manager.draw()
         self.game.window.render(self.water_sprite, [16,16])
+        self.catch_book.draw()
         self.game.window.render(self.border_sprite, [0,0])
 

@@ -21,6 +21,18 @@ class Game(FrostlightEngine):
         self.input.bind("left",KEYBOARD.A,PRESSED)
         self.input.bind("right",KEYBOARD.RIGHT,PRESSED)
         self.input.bind("right",KEYBOARD.D,PRESSED)
+        
+        self.input.bind("book_left",KEYBOARD.LEFT,CLICKED)
+        self.input.bind("book_left",KEYBOARD.A,CLICKED)
+        self.input.bind("book_right",KEYBOARD.RIGHT,CLICKED)
+        self.input.bind("book_right",KEYBOARD.D,CLICKED)
+        self.input.bind("book_close",KEYBOARD.DOWN,CLICKED)
+        self.input.bind("book_close",KEYBOARD.S,CLICKED)
+        
+        self.input.bind("ui_left",KEYBOARD.J,CLICKED)
+        self.input.bind("ui_right",KEYBOARD.L,CLICKED)
+        self.input.bind("ui_up",KEYBOARD.I,CLICKED)
+        self.input.bind("ui_down",KEYBOARD.K,CLICKED)
 
         self.input.bind("up",KEYBOARD.UP,PRESSED)
         self.input.bind("up",KEYBOARD.W,PRESSED)
@@ -30,7 +42,9 @@ class Game(FrostlightEngine):
         self.input.bind("fish",KEYBOARD.SPACE,CLICKED)
 
         self.input.bind("accept",MOUSE.LEFT,CLICKED)
-        self.input.bind("accept",KEYBOARD.ENTER,PRESSED)
+        self.input.bind("accept",KEYBOARD.ENTER,CLICKED)
+        self.input.bind("accept",KEYBOARD.UP,CLICKED)
+        self.input.bind("accept",KEYBOARD.W,CLICKED)
         
         self.input.bind("menu",KEYBOARD.ESCAPE,CLICKED)
 
@@ -48,6 +62,7 @@ class Game(FrostlightEngine):
         self.player_manager = PlayerManager(self)
         self.network_manager = NetworkManager(self)
         self.player_manager.player_list[None] = self.player
+        self.save_manager.set_encryption_key("save0",b"OCqZTMHYWLh1DoCrXUDoI1hU6G9PwS03apyMKMCGBx4=")
         
     def event_quit(self):
         self.running = False
@@ -88,9 +103,14 @@ class Game(FrostlightEngine):
             self.leave_button.update(self.mouse_pos, self.transition_unit)
             self.mouse_sprite.alpha = self.transition_unit
             self.title_sprite.alpha = self.transition_unit
+            
+        self.mouse_sprite.alpha = self.transition_unit
               
         if self.input.get("menu"):
-            self.state = "menu"
+            if self.island.catch_book.opened:
+                self.island.catch_book.close_book()
+            else:
+                self.state = "menu"
 
     def draw(self):
         self.island.draw()
@@ -100,6 +120,9 @@ class Game(FrostlightEngine):
             self.multiplayer_button.draw()
             self.singleplayer_button.draw()
             self.leave_button.draw()
+            self.window.render(self.mouse_sprite, self.mouse_pos)
+        
+        if self.state == "game" and self.island.catch_book.opened:
             self.window.render(self.mouse_sprite, self.mouse_pos)
 
 game = Game()
