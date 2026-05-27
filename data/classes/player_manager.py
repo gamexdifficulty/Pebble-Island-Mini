@@ -87,10 +87,12 @@ class PlayerManager:
             player = self.player_list[session_id]
             if not player.can_be_controlled:
                 self.unregister_player(session_id)
+                if self.player_list[session_id].alpha == 0.0:
+                    del self.player_list[session_id]
 
     def register_player(self,session_id: str, x, y, animation, flipped):
         self.create_queue[session_id] = [x, y, animation, flipped]
         
     def unregister_player(self, session_id):
         if session_id in self.player_list:
-            del self.player_list[session_id]
+            self.player_list[session_id].can_be_deleted = True
