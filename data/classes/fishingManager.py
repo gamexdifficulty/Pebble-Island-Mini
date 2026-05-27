@@ -68,10 +68,12 @@ class FishingManager:
         self.bobber_pos = [0,0]
 
     def update(self):
-        self.calculate_bobber_position()
+        if self.fishing:
+            self.calculate_bobber_position()
         self.update_flying_fish()
         self.update_biting_particles()
         self.update_catch_notifications()
+
         if self.hit_water:
             self.biting_wait_time -= self.game.delta_time
             
