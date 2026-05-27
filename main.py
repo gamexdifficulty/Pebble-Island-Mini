@@ -37,14 +37,14 @@ class Game(FrostlightEngine):
         self.multiplayer_button = Button(self, pos=[144,64], sprite="button-multiplayer.png", callback=self.button_multiplayer)
         self.singleplayer_button = Button(self, pos=[144,84], sprite="button-singleplayer.png", callback=self.button_singleplayer)
         self.leave_button = Button(self, pos=[144,104], sprite="button-leave.png", callback=self.button_quit)
+        self.title_sprite = Sprite("title.png")
         
         self.gameManager = GameManager(self)
         
-        self.player = Player(self,True)
         self.island = Island(self)
+        self.player = Player(self,True)
         self.player_manager = PlayerManager(self)
         self.network_manager = NetworkManager(self)
-
         self.player_manager.player_list[None] = self.player
         
     def event_quit(self):
@@ -85,6 +85,7 @@ class Game(FrostlightEngine):
             self.singleplayer_button.update(self.mouse_pos, self.transition_unit)
             self.leave_button.update(self.mouse_pos, self.transition_unit)
             self.mouse_sprite.alpha = self.transition_unit
+            self.title_sprite.alpha = self.transition_unit
               
         if self.input.get("menu"):
             self.state = "menu"
@@ -93,6 +94,7 @@ class Game(FrostlightEngine):
         self.island.draw()
 
         if self.state == "menu":
+            self.window.render(self.title_sprite, [119, 35])
             self.multiplayer_button.draw()
             self.singleplayer_button.draw()
             self.leave_button.draw()
