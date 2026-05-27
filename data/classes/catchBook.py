@@ -188,9 +188,9 @@ FISH_DATABASE = {
 
 RARITY_WEIGHTS = {
     "common": 60,
-    "rare": 25,
-    "very rare": 10,
-    "legendary": 2
+    "rare": 40,
+    "very rare": 25,
+    "legendary": 10
 }
 
 class CatchBook:
