@@ -39,18 +39,18 @@ class Sky:
         SCREEN_WIDTH = 320
 
         spacing = (SCREEN_WIDTH + CLOUD_WIDTH) / num_clouds
-        # print(spacing, num_clouds)
 
         if num_clouds > len(self.clouds):
 
-            last_cloud = self.clouds[-1]
-
-            required_distance = (
-                spacing * random.uniform(0.8, 1.2)
-            )
-
-            if last_cloud.pos[0]+16 > required_distance:
+            if len(self.clouds) == 0:
                 self.spawn_cloud()
+            else:
+                last_cloud = self.clouds[-1]
+
+                required_distance = (spacing * random.uniform(0.8, 1.2))
+
+                if last_cloud.pos[0]+16 > required_distance:
+                    self.spawn_cloud()
                     
         for cloud in self.clouds.copy():
             cloud.update(max(weather_value/2,1))
