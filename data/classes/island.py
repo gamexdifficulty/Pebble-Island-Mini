@@ -9,6 +9,7 @@ from data.classes.campfire import Campfire
 from data.classes.grass import Grass
 from data.classes.sky import Sky
 from data.classes.particle import ParticleManager
+from data.classes.fishingManager import FishingManager
 class Island:
     def __init__(self, game:"Game"):
         self.game = game
@@ -20,6 +21,7 @@ class Island:
         self.grass = Grass(self.game)
         self.sky = Sky(self.game)
         self.particle_manager = ParticleManager(self.game)
+        self.fishing_manager = FishingManager(self.game)
         
         self.border_sprite = Sprite("border.png")
         self.island_sprite = Sprite("island.png")
@@ -31,10 +33,12 @@ class Island:
         self.water_sprite.set_custom_shader("water_wave.frag")
 
     def update(self):
-        self.game.player_manager.update()
+        if self.game.state == "game":
+            self.game.player_manager.update()
         self.campfire.update()
         self.sky.update()
         self.particle_manager.update()
+        self.fishing_manager.update()
         self.water_sprite.set_custom_uniforms("uTime",time.time() % 1000)
         
         self.house_particle_timer = max(self.house_particle_timer-self.game.delta_time, 0.0)
@@ -53,9 +57,11 @@ class Island:
         self.game.window.render(self.island_sprite, [112,125])
         self.campfire.draw()
         self.game.window.render(self.house_sprite, [160,97])
-        self.game.window.render(self.water_sprite, [16,16])
-        self.game.player_manager.draw()
+        if self.game.state == "game":
+            self.game.player_manager.draw()
         self.particle_manager.draw()
         self.grass.draw()
+        self.fishing_manager.draw()
+        self.game.window.render(self.water_sprite, [16,16])
         self.game.window.render(self.border_sprite, [0,0])
 
