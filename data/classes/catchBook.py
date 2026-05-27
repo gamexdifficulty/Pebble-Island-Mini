@@ -282,6 +282,14 @@ class CatchBook:
             if self.point_in_rect(mouse_pos, self.ui_positions[2], self.ui_button_size):
                 self.close_book()
 
+        if self.selected_index > 3:
+            self.selected_index -= 4
+            self.next_page()
+        
+        elif self.selected_index < 0:
+            self.selected_index += 4
+            self.prev_page()
+            
         self.selected_index = max(0, min(self.selected_index, 3))
 
         start = self.page * 4
@@ -339,13 +347,15 @@ class CatchBook:
             self.font.draw(f'{self.selected_fish["wind"][0]}-{self.selected_fish["wind"][1]}',[194, 71])
 
     def next_page(self):
+        if self.page == math.ceil(len(FISH_DATABASE) / 4) - 1:
+            self.selected_index = 4
         self.page = min(self.page + 1, math.ceil(len(FISH_DATABASE) / 4) - 1)
-        self.selected_index = 0
 
     def prev_page(self):
+        if self.page == 0:
+            self.selected_index = 0
         self.page = max(self.page - 1, 0)
-
-        self.selected_index = 0
+        
 
     def close_book(self):
         self.opened = False
