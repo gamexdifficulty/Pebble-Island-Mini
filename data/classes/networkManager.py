@@ -36,7 +36,7 @@ class NetworkManager:
             self.socket.sendall(packet.to_bytes())
 
         except Exception as e:
-            print(f"Send error: {e}")
+            self.game.logger.error("Send error")
             self.close()
         
     def recv_exact(self, size: int) -> bytes:
@@ -59,7 +59,7 @@ class NetworkManager:
                 packet_cls = PACKETS.get(packet_id)
 
                 if packet_cls is None:
-                    print("Unknown packet:", packet_id)
+                    self.game.logger.error(f"Unknown packet: {packet_id}")
                     continue
 
                 packet = packet_cls.from_bytes(packet_data)
@@ -68,9 +68,11 @@ class NetworkManager:
                 if handler:
                     handler(packet)
                 else:
-                    print(f"No handler for packet {packet_id}")
+                    self.game.logger.error(f"No handler for packet {packet_id}")
+
         except Exception as e:
-            print("Receive error:", e)
+            if type(e) != ConnectionError:
+                self.game.logger.error("Receive error")
         finally:
             self.close()
     
@@ -81,7 +83,7 @@ class NetworkManager:
         self.send(PacketQuit())
     
     def getJoinAccept(self,packet:PacketJoinConfirm):
-        print(packet.sessionID)
+        self.game.logger.info(f"Joined Server, go SessionID {packet.sessionID}")
         self.sessionID = packet.sessionID
     
     def getUpdatePlayerList(self, packet:PacketUpdatePlayerList):
@@ -123,8 +125,8 @@ class NetworkManager:
                     self.connected = True
                     threading.Thread(target=self.receive,daemon=True).start()
                     self.send(PacketJoinRequest())
-                except Exception as e:
-                    print(f"Failed to connect to server {e}")
+                except Exception:
+                    self.game.logger.error("Failed to connect to server")
                     time.sleep(1)
 
             clock = pygame.time.Clock()
@@ -145,4 +147,4 @@ class NetworkManager:
             self.socket.close()
         except:
             pass
-        print("Client disconnected")
+        self.game.logger.info("Disconnected from server")
