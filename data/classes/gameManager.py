@@ -12,6 +12,7 @@ class GameManager:
         self.weather_value = 0
         self.time = self.game.save_manager.load("daytime","save0",[0,1])[1]
         self.day = self.game.save_manager.load("daytime","save0",[0,1])[0]
+        self.last_save_timestamp = 0
 
         opensimplex.seed(933673157426)
         
@@ -24,5 +25,7 @@ class GameManager:
             self.day += 1
             if self.day >= 31:
                 self.day = 1
-                
-        self.game.save_manager.save("daytime",[self.day, self.time], "save0")
+        
+        if self.time - self.last_save_timestamp > 100:
+            self.last_save_timestamp = self.time
+            self.game.save_manager.save("daytime",[self.day, self.time], "save0")
