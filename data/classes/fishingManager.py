@@ -116,7 +116,7 @@ class FishingManager:
         sprite_left = (canvas_w - sprite_w) // 2
         sprite_top = (canvas_h - sprite_h) // 2
 
-        bobber_x = self.bobber_pos[0]
+        bobber_x = self.bobber_pos[0] + 3
         uvs_x = (bobber_x - sprite_left) / sprite_w
         uvs_x = max(0.0, min(uvs_x, 1.0))
 
