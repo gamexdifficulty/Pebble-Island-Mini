@@ -254,13 +254,8 @@ class FishingManager:
         return random.choice(weighted)
         
     def spawn_catch_notification(self, text):
-        self.catch_notifications.append({
-            "text": text,
-            "pos": [self.game.player.x - 14, self.game.player.y - 18],
-            "life": 2.0,
-            "max_life": 2.0
-        })
-
+        font_length = (len(text)-1)*4
+        self.catch_notifications.append({"text": text, "pos": [self.game.player.x - int(font_length/2) + 4, self.game.player.y - 18], "life": 2.0, "max_life": 2.0})
 
     def update_catch_notifications(self):
         for notification in self.catch_notifications[:]:
