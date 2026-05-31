@@ -20,7 +20,7 @@ class Sky:
 
         self.sky_sprite.set_custom_shader("sky.frag")
 
-    def update(self):        
+    def update(self):
         # Sky
         if self.game.gameManager.time >= 1900:
             self.stars_sprite.alpha = min(1.0, ((self.game.gameManager.time-1900)/200))

@@ -24,6 +24,7 @@ class Button:
             if alpha == 1.0:
                 self.selected = True
                 if self.game.input.get("accept"):
+                    self.game.input.reset_key("accept")
                     if self.callback != None:
                         self.callback()
 

@@ -221,6 +221,18 @@ class InputManager:
                     return 1
         return 0
     
+    def reset_key(self, key:str):
+        for input_code, method in self._bindings.get(key, []):
+            if input_code.device_type == DeviceType.KEYBOARD:
+                state = self._keyboard.states.get(input_code.code, [False, False, False])
+                if state[method]:
+                    self._keyboard.states[input_code.code][CLICKED] = False
+
+            if input_code.device_type == DeviceType.MOUSE:
+                state = self.mouse._states.get(input_code.code, [False, False, False])
+                if state[method]:
+                    self.mouse._states[input_code.code][CLICKED] = False
+    
     def _on_key_press(self, _, key, scancode, action, mods):
         if action == glfw.PRESS:
             self._keyboard.update_key_down(key)

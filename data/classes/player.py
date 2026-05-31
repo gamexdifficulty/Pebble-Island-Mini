@@ -37,8 +37,9 @@ class Player:
         if self.can_be_deleted:
             self.alpha = max(0.0,self.alpha-self.game.delta_time*0.75)
       
-        if self.can_be_controlled:
-            if self.game.input.get("fish"):
+        if self.can_be_controlled and self.game.state == "game":
+            if self.game.input.get("accept") and not self.game.island.catch_book.opened and not self.game.island.catch_book.hover_over_house:
+                self.game.input.reset_key("accept")
                 if self.animation_state != "fishing":
                     self.fishing_state = "casting"
                     self.animation_state = "fishing"

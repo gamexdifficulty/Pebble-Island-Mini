@@ -208,7 +208,8 @@ class CatchBook:
 
         self.selected_index = 0
         self.selected_fish = None
-
+        
+        self.hover_over_house = False
         self.player_save = {}
 
         self.fish_keys = list(FISH_DATABASE.keys())
@@ -232,8 +233,11 @@ class CatchBook:
         ]
 
     def update(self):
+        self.hover_over_house = False
         if self.game.player.x >= 171 and self.game.player.x <= 185:
-            if self.game.input.get("accept") and self.game.player.alpha == 1.0 and self.game.player.animation_state == "idle":
+            self.hover_over_house = True
+            if self.game.input.get("accept") and self.game.player.alpha == 1.0 and self.game.player.animation_state == "idle" and self.game.state == "game" and not self.opened:
+                self.game.input.reset_key("accept")
                 self.opened = True
                 self.player_save = self.game.save_manager.load("catchbook","save0",{})
 
@@ -244,14 +248,15 @@ class CatchBook:
                      (self.game.input.mouse.position[1]/self.game.window.window_size[1])*self.game.window.canvas_size[1]]
         mouse_click = self.game.input.get("accept")
 
-        if self.game.input.get("book_close"):
+        if self.game.input.get("back"):
+            self.game.input.reset_key("back")
             self.close_book()
 
-        if self.game.input.get("book_left"):
-            self.prev_page()
+        # if self.game.input.get("book_left"):
+        #     self.prev_page()
 
-        if self.game.input.get("book_right"):
-            self.next_page()
+        # if self.game.input.get("book_right"):
+        #     self.next_page()
 
         if self.game.input.get("ui_left"):
             self.selected_index -= 1
@@ -281,6 +286,7 @@ class CatchBook:
             # close
             if self.point_in_rect(mouse_pos, self.ui_positions[2], self.ui_button_size):
                 self.close_book()
+                self.game.input.get("accept")
 
         if self.selected_index > 3:
             self.selected_index -= 4
@@ -303,7 +309,7 @@ class CatchBook:
                 self.selected_fish = FISH_DATABASE[fish_key]
 
     def draw(self):
-        if self.game.player.x >= 170 and self.game.player.x <= 185 and self.game.state == "game":
+        if self.hover_over_house and self.game.state == "game":
             if self.game.player.alpha == 1.0:
                 self.game.window.render(self.catchbook_icon_sprite, [168,81])
         

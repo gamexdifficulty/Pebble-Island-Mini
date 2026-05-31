@@ -48,7 +48,7 @@ class PlayerManager:
         for player in self.player_list.values():
             player.draw()
         
-        if self.game.network_manager.connected:
+        if self.game.network_manager.connected and self.game.state == "game":
             self.game.window.render(self.player_indicator_sprite,[int(self.game.player.x)+2,self.game.player.y-2])
 
     def get(self, session_id):
@@ -95,4 +95,8 @@ class PlayerManager:
         
     def unregister_player(self, session_id):
         if session_id in self.player_list:
+            self.player_list[session_id].can_be_deleted = True
+            
+    def unregister_all(self):
+        for session_id in self.player_list:
             self.player_list[session_id].can_be_deleted = True

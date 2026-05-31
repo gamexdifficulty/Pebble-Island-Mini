@@ -35,8 +35,7 @@ class Island:
         self.water_sprite.set_custom_shader("water_wave.frag")
 
     def update(self):
-        if self.game.state == "game":
-            self.game.player_manager.update()
+        self.game.player_manager.update()
         self.campfire.update()
         self.sky.update()
         self.catch_book.update()
@@ -60,8 +59,7 @@ class Island:
         self.game.window.render(self.island_sprite, [112,125])
         self.campfire.draw()
         self.game.window.render(self.house_sprite, [160,97])
-        if self.game.state == "game":
-            self.game.player_manager.draw()
+        self.game.player_manager.draw()
         self.particle_manager.draw()
         self.grass.draw()
         self.fishing_manager.draw()

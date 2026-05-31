@@ -21,12 +21,15 @@ class Game(FrostlightEngine):
         self.input.bind("left",KEYBOARD.A,PRESSED)
         self.input.bind("right",KEYBOARD.RIGHT,PRESSED)
         self.input.bind("right",KEYBOARD.D,PRESSED)
+        self.input.bind("up",KEYBOARD.UP,PRESSED)
+        self.input.bind("up",KEYBOARD.W,PRESSED)
+        self.input.bind("down",KEYBOARD.DOWN,PRESSED)
+        self.input.bind("down",KEYBOARD.S,PRESSED)
         
-        # self.input.bind("book_left",KEYBOARD.LEFT,CLICKED)
-        # self.input.bind("book_left",KEYBOARD.A,CLICKED)
-        # self.input.bind("book_right",KEYBOARD.RIGHT,CLICKED)
-        # self.input.bind("book_right",KEYBOARD.D,CLICKED)
-        self.input.bind("book_close",KEYBOARD.S,CLICKED)
+        self.input.bind("accept",MOUSE.LEFT,CLICKED)
+        self.input.bind("accept",KEYBOARD.ENTER,CLICKED)
+        self.input.bind("accept",KEYBOARD.UP,CLICKED)
+        self.input.bind("accept",KEYBOARD.SPACE,CLICKED)
         
         self.input.bind("ui_left",KEYBOARD.LEFT,CLICKED)
         self.input.bind("ui_left",KEYBOARD.A,CLICKED)
@@ -35,25 +38,13 @@ class Game(FrostlightEngine):
         self.input.bind("ui_right",KEYBOARD.D,CLICKED)
         self.input.bind("ui_right",KEYBOARD.L,CLICKED)
         self.input.bind("ui_up",KEYBOARD.UP,CLICKED)
-        self.input.bind("ui_up",KEYBOARD.D,CLICKED)
+        self.input.bind("ui_up",KEYBOARD.W,CLICKED)
         self.input.bind("ui_up",KEYBOARD.I,CLICKED)
         self.input.bind("ui_down",KEYBOARD.DOWN,CLICKED)
-        self.input.bind("ui_down",KEYBOARD.D,CLICKED)
+        self.input.bind("ui_down",KEYBOARD.S,CLICKED)
         self.input.bind("ui_down",KEYBOARD.K,CLICKED)
-
-        self.input.bind("up",KEYBOARD.UP,PRESSED)
-        self.input.bind("up",KEYBOARD.W,PRESSED)
-        self.input.bind("down",KEYBOARD.DOWN,PRESSED)
-        self.input.bind("down",KEYBOARD.S,PRESSED)
         
-        self.input.bind("fish",KEYBOARD.SPACE,CLICKED)
-
-        self.input.bind("accept",MOUSE.LEFT,CLICKED)
-        self.input.bind("accept",KEYBOARD.ENTER,CLICKED)
-        self.input.bind("accept",KEYBOARD.UP,CLICKED)
-        self.input.bind("accept",KEYBOARD.W,CLICKED)
-        
-        self.input.bind("menu",KEYBOARD.ESCAPE,CLICKED)
+        self.input.bind("back",KEYBOARD.ESCAPE,CLICKED)
 
         self.mouse_sprite = Sprite("mouse.png")
 
@@ -84,10 +75,13 @@ class Game(FrostlightEngine):
         exit(0)
     
     def button_multiplayer(self):
+        self.player_manager.player_list[None] = self.player
+        # self.player_manager.register_player()
         self.begin_transition()
         self.network_manager.run()
     
     def button_singleplayer(self):
+        self.player_manager.player_list[None] = self.player
         self.begin_transition()
     
     def update(self):
@@ -113,11 +107,15 @@ class Game(FrostlightEngine):
             
         self.mouse_sprite.alpha = self.transition_unit
               
-        if self.input.get("menu"):
+        if self.input.get("back"):
+            self.input.get("back")
             if self.island.catch_book.opened:
+                self.input.get("back")
                 self.island.catch_book.close_book()
             else:
                 self.state = "menu"
+                # self.network_manager.close()
+                self.player_manager.unregister_all()
 
     def draw(self):
         self.island.draw()
