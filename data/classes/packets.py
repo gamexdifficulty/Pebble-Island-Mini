@@ -14,16 +14,6 @@ class Packet:
     def from_bytes(cls, data: bytes):
         values = json.loads(data.decode("utf-8"))
         return cls(**values)
-
-@dataclass
-class PacketUpdatePlayer(Packet):
-    PACKET_ID = 14
-
-    session_id: str
-    x: int
-    y: int
-    animation: str
-    flipped: bool
     
 @dataclass
 class PacketQuit(Packet):
@@ -35,7 +25,7 @@ class PacketQuit(Packet):
 class PacketJoinRequest(Packet):
     PACKET_ID = 1
 
-    ping = 1
+    protocolVersion = 1
     
 @dataclass
 class PacketJoinConfirm(Packet):
